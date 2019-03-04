@@ -8,6 +8,8 @@ import { Route } from 'react-router-dom';
 import Home from './components/Home/Home';
 import Register from './components/Auth/Register';
 import Login from './components/Auth/Login';
+import Cart from './components/Cart/Cart';
+import Orders from './components/Orders/MyOrders';
 
 class App extends Component {
   render() {
@@ -18,6 +20,8 @@ class App extends Component {
         <Route path='/menu' component={Home} />
         <Route path='/register' component={Register} />
         <Route path='/login' component={Login} />
+        <Route path='/cart' component={Cart} />
+        <Route path='/orders' component={Orders} />
         <Footer />
       </div>
     );

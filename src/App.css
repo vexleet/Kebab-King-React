@@ -69,3 +69,8 @@ body {
 .marginTop{
   margin-top: 20px;
 }
+
+.product-table img {
+  max-height: 150px;
+  min-width: 50px;
+}
