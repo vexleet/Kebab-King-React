@@ -13,6 +13,12 @@ class Register extends Component {
         }
 
         this.handleChange = this.handleChange.bind(this);
+        this.handleSubmit = this.handleSubmit.bind(this);
+    }
+
+    handleSubmit(e) {
+        e.preventDefault();
+        this.props.history.push("/login");
     }
 
     handleChange(e) {
@@ -21,10 +27,10 @@ class Register extends Component {
 
     render() {
         return (
-            <MDBContainer className="marginTop">
-                <MDBRow>
+            <MDBContainer className="marginTop col-centered">
+                <MDBRow className="center-block">
                     <MDBCol md="4">
-                        <form>
+                        <form method="post" onSubmit={this.handleSubmit}>
                             <p className="h2 text-center mb-4">Sign up</p>
                             <label htmlFor="defaultFormRegisterNameEx"
                                 className="grey-text">Your name</label>

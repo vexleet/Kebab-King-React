@@ -45,7 +45,7 @@ let kebabs = [
     }
 ]
 
-const Home = () => {
+const Home = (props) => {
     return (
         <KebabCards kebabs={kebabs} />
     );

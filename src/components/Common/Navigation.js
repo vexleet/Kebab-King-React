@@ -17,7 +17,7 @@ class Navigation extends Component {
             <MDBNavbar color="orange" dark expand="md">
                 <MDBContainer>
                     <MDBNavbarBrand>
-                        <strong className="white-text" className="brandSize">Kebab King</strong>
+                        <strong className="white-text brandSize">Kebab King</strong>
                     </MDBNavbarBrand>
                     <MDBNavbarToggler onClick={this.toggleCollapse} />
                     <MDBCollapse id="navbarCollapse3" isOpen={this.state.isOpen} navbar>
@@ -27,6 +27,15 @@ class Navigation extends Component {
                             </MDBNavItem>
                             <MDBNavItem className="navItemSize">
                                 <MDBNavLink to="/menu">Menu</MDBNavLink>
+                            </MDBNavItem>
+                            <MDBNavItem className="navItemSize">
+                                <MDBNavLink to="/admin/orders">Approve Orders</MDBNavLink>
+                            </MDBNavItem>
+                            <MDBNavItem className="navItemSize">
+                                <MDBNavLink to="/orders">My Orders</MDBNavLink>
+                            </MDBNavItem>
+                            <MDBNavItem className="navItemSize">
+                                <MDBNavLink to="/orders">Create new kebab</MDBNavLink>
                             </MDBNavItem>
                         </MDBNavbarNav>
                         <MDBNavbarNav right>

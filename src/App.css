@@ -74,3 +74,8 @@ body {
   max-height: 150px;
   min-width: 50px;
 }
+
+.col-centered{
+  float: none;
+  margin: 0 auto;
+}

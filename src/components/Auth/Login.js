@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { MDBContainer, MDBRow, MDBCol, MDBBtn, MDBInput } from 'mdbreact';
+import { MDBContainer, MDBRow, MDBCol, MDBBtn } from 'mdbreact';
 
 class Login extends Component {
     constructor(props) {
@@ -11,6 +11,13 @@ class Login extends Component {
         }
 
         this.handleChange = this.handleChange.bind(this);
+        this.handleSubmit = this.handleSubmit.bind(this);
+    }
+
+    handleSubmit(e) {
+        e.preventDefault();
+
+        this.props.history.push('/');
     }
 
     handleChange(e) {
@@ -22,7 +29,7 @@ class Login extends Component {
             <MDBContainer className="marginTop">
                 <MDBRow>
                     <MDBCol md="4">
-                        <form>
+                        <form method="post" onSubmit={this.handleSubmit}>
                             <p className="h2 text-center mb-4">Sign in</p>
                             <label htmlFor="defaultFormRegisterEmailEx"
                                 className="grey-text">Your email</label>
