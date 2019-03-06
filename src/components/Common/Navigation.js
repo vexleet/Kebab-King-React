@@ -4,15 +4,21 @@ import {
 } from "mdbreact";
 
 class Navigation extends Component {
-    state = {
-        isOpen: false
-    };
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            isOpen: false,
+        }
+    }
 
     toggleCollapse = () => {
         this.setState({ isOpen: !this.state.isOpen });
     }
 
     render() {
+        let { isAuthenticated, isAdmin, logout } = this.props;
+
         return (
             <MDBNavbar color="orange" dark expand="md">
                 <MDBContainer>
@@ -28,24 +34,29 @@ class Navigation extends Component {
                             <MDBNavItem className="navItemSize">
                                 <MDBNavLink to="/menu">Menu</MDBNavLink>
                             </MDBNavItem>
-                            <MDBNavItem className="navItemSize">
+                            {isAdmin && <MDBNavItem className="navItemSize">
                                 <MDBNavLink to="/admin/orders">Approve Orders</MDBNavLink>
-                            </MDBNavItem>
-                            <MDBNavItem className="navItemSize">
+                            </MDBNavItem>}
+                            {isAuthenticated && !isAdmin && <MDBNavItem className="navItemSize">
                                 <MDBNavLink to="/orders">My Orders</MDBNavLink>
-                            </MDBNavItem>
-                            <MDBNavItem className="navItemSize">
+                            </MDBNavItem>}
+                            {isAdmin && <MDBNavItem className="navItemSize">
                                 <MDBNavLink to="/create">Create new kebab</MDBNavLink>
-                            </MDBNavItem>
+                            </MDBNavItem>}
                         </MDBNavbarNav>
-                        <MDBNavbarNav right>
+                        {!isAuthenticated && <MDBNavbarNav right>
                             <MDBNavItem>
                                 <MDBNavLink to="/register" className="navItemSize">Register</MDBNavLink>
                             </MDBNavItem>
                             <MDBNavItem>
                                 <MDBNavLink to="/login" className="navItemSize">Login</MDBNavLink>
                             </MDBNavItem>
-                        </MDBNavbarNav>
+                        </MDBNavbarNav>}
+                        {isAuthenticated && <MDBNavbarNav right>
+                            <MDBNavItem>
+                                <MDBNavLink to="" className="navItemSize" onClick={logout}>Logout</MDBNavLink>
+                            </MDBNavItem>
+                        </MDBNavbarNav>}
                     </MDBCollapse>
                 </MDBContainer>
             </MDBNavbar>

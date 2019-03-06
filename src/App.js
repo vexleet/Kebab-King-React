@@ -15,29 +15,63 @@ import NotFound from './components/Common/NotFound/NotFound';
 import AppliedRoute from './components/Routes/AppliedRoute';
 import AdminRoute from './components/Routes/AdminRoute';
 import PrivateRoute from './components/Routes/PrivateRoute';
+import toastr from 'toastr';
+
 class App extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      isAuthenticated: true,
-      isAdmin: true,
+      username: '',
+      isAuthenticated: false,
+      isAdmin: false,
     }
+
+    this.userHasAuthenticated = this.userHasAuthenticated.bind(this);
+    this.logout = this.logout.bind(this);
   }
+
+  userHasAuthenticated(authenticated, username, token, isAdmin) {
+    this.setState({
+      username: username,
+      isAuthenticated: authenticated,
+      isAdmin: isAdmin,
+    });
+
+    localStorage.setItem("username", username);
+    localStorage.setItem("token", token);
+    localStorage.setItem("isAdmin", isAdmin);
+  }
+
+  logout() {
+    localStorage.clear();
+    //TODO: Fix logout
+    this.setState({
+      username: "",
+      isAuthenticated: false,
+      isAdmin: false,
+    });
+    toastr.success("You have successfully logged out")
+    this.props.history.push("/login");
+  }
+
   render() {
     const childProps = {
       isAuthenticated: this.state.isAuthenticated,
       isAdmin: this.state.isAdmin,
+      username: this.state.username,
+      userHasAuthenticated: this.userHasAuthenticated,
+      logout: this.logout,
     };
 
     return (
       <div className="App">
-        <Navigation />
+        <Navigation {...childProps} />
         <Switch>
           <AppliedRoute exact path='/' component={Home} props={childProps} />
           <AppliedRoute path='/menu' component={Home} />
-          <AppliedRoute path='/register' component={Register} />
-          <AppliedRoute path='/login' component={Login} />
+          <AppliedRoute path='/register' component={Register} props={childProps} />
+          <AppliedRoute path='/login' component={Login} props={childProps} />
           <AdminRoute path='/admin/orders' component={AdminOrders} props={childProps} />
           <AdminRoute path='/create' component={Create} props={childProps} />
           <PrivateRoute path='/cart' component={Cart} props={childProps} />

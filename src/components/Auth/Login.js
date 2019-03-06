@@ -1,5 +1,9 @@
 import React, { Component } from 'react';
 import { MDBContainer, MDBRow, MDBCol, MDBBtn } from 'mdbreact';
+import { login } from '../../api/remote';
+import loginValidator from '../../utils/loginValidator';
+import { loginValidateForm } from '../../utils/formValidators';
+import toastr from 'toastr';
 
 class Login extends Component {
     constructor(props) {
@@ -16,8 +20,28 @@ class Login extends Component {
 
     handleSubmit(e) {
         e.preventDefault();
+        const user = this.state;
 
-        this.props.history.push('/');
+        if (!loginValidator(user)) {
+            return;
+        }
+
+        login(user)
+            .then((res) => {
+                if (!res.success) {
+                    toastr.error("You have entered an invalid email or password");
+                    return;
+                }
+
+                toastr.success(res.message);
+                let username = res.user.username;
+                let token = res.token;
+                let isAdmin = res.user.roles.length > 0;
+                this.props.userHasAuthenticated(true, username, token, isAdmin);
+                this.props.history.push('/');
+            })
+
+
     }
 
     handleChange(e) {
@@ -25,6 +49,7 @@ class Login extends Component {
     }
 
     render() {
+        const formObj = loginValidateForm(this.state);
         return (
             <MDBContainer className="marginTop">
                 <MDBRow>
@@ -36,7 +61,7 @@ class Login extends Component {
                             <input
                                 type="email"
                                 id="defaultFormRegisterEmailEx"
-                                className="form-control"
+                                className={formObj.validEmail() ? "form-control is-valid" : "form-control is-invalid"}
                                 name="email"
                                 onChange={this.handleChange}
                             />
@@ -44,9 +69,9 @@ class Login extends Component {
                             <label htmlFor="defaultFormRegisterConfirmEx"
                                 className="grey-text">Your password</label>
                             <input
-                                type="email"
+                                type="password"
                                 id="defaultFormRegisterConfirmEx"
-                                className="form-control"
+                                className={formObj.validPassword() ? "form-control is-valid" : "form-control is-invalid"}
                                 name="password"
                                 onChange={this.handleChange}
                             />

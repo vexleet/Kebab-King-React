@@ -1,5 +1,9 @@
 import React, { Component } from 'react';
 import { MDBContainer, MDBRow, MDBCol, MDBBtn } from 'mdbreact';
+import { registerUser } from '../../api/remote';
+import registerValidator from '../../utils/registerValidator';
+import { registerValidateForm } from '../../utils/formValidators';
+import toastr from 'toastr';
 
 class Register extends Component {
     constructor(props) {
@@ -18,7 +22,22 @@ class Register extends Component {
 
     handleSubmit(e) {
         e.preventDefault();
-        this.props.history.push("/login");
+        const user = this.state;
+
+        if (!registerValidator(user)) {
+            return;
+        }
+
+        registerUser(user)
+            .then((res) => {
+                if (!res.success) {
+                    toastr.error("This email already exists");
+                    return;
+                }
+
+                toastr.success("Registration successful. You can now login");
+                this.props.history.push("/login");
+            });
     }
 
     handleChange(e) {
@@ -26,6 +45,8 @@ class Register extends Component {
     }
 
     render() {
+        const formObj = registerValidateForm(this.state);
+
         return (
             <MDBContainer className="marginTop col-centered">
                 <MDBRow className="center-block">
@@ -37,7 +58,7 @@ class Register extends Component {
                             <input
                                 type="text"
                                 id="defaultFormRegisterNameEx"
-                                className="form-control"
+                                className={formObj.validUsername() ? "form-control is-valid" : "form-control is-invalid"}
                                 name="username"
                                 onChange={this.handleChange}
                             />
@@ -47,7 +68,7 @@ class Register extends Component {
                             <input
                                 type="email"
                                 id="defaultFormRegisterEmailEx"
-                                className="form-control"
+                                className={formObj.validEmail() ? "form-control is-valid" : "form-control is-invalid"}
                                 name="email"
                                 onChange={this.handleChange}
                             />
@@ -55,9 +76,9 @@ class Register extends Component {
                             <label htmlFor="defaultFormRegisterConfirmEx"
                                 className="grey-text">Your password</label>
                             <input
-                                type="email"
+                                type="password"
                                 id="defaultFormRegisterConfirmEx"
-                                className="form-control"
+                                className={formObj.validPassword() ? "form-control is-valid" : "form-control is-invalid"}
                                 name="password"
                                 onChange={this.handleChange}
                             />
@@ -67,7 +88,7 @@ class Register extends Component {
                             <input
                                 type="password"
                                 id="defaultFormRegisterPasswordEx"
-                                className="form-control"
+                                className={formObj.validConfirmPassword() ? "form-control is-valid" : "form-control is-invalid"}
                                 name="confirmPassword"
                                 onChange={this.handleChange}
                             />
