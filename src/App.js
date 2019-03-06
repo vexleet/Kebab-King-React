@@ -12,6 +12,7 @@ import AdminOrders from './components/Orders/AdminOrders';
 import KebabDetails from './components/KebabDetails/KebabPage';
 import Create from './components/Create/Create';
 import NotFound from './components/Common/NotFound/NotFound';
+import Loading from './components/Common/Loading/Loading';
 import AppliedRoute from './components/Routes/AppliedRoute';
 import AdminRoute from './components/Routes/AdminRoute';
 import PrivateRoute from './components/Routes/PrivateRoute';
@@ -25,6 +26,7 @@ class App extends Component {
       username: '',
       isAuthenticated: false,
       isAdmin: false,
+      isLoading: true,
     }
 
     this.userHasAuthenticated = this.userHasAuthenticated.bind(this);
@@ -55,7 +57,34 @@ class App extends Component {
     this.props.history.push("/login");
   }
 
+  componentDidMount() {
+    let token = localStorage.getItem("token");
+    if (token) {
+      let username = localStorage.getItem("username");
+      let isAdmin = localStorage.getItem("isAdmin") === "true";
+
+      this.setState({
+        username: username,
+        isAdmin: isAdmin,
+        isAuthenticated: true,
+        isLoading: false,
+      });
+    }
+
+    //TODO: Fetch kebabs
+  }
+
   render() {
+    if (this.state.isLoading) {
+      return (
+        <div className="App">
+          <Navigation {...childProps} />
+          <Loading />
+          <Footer />
+        </div>
+      )
+    }
+
     const childProps = {
       isAuthenticated: this.state.isAuthenticated,
       isAdmin: this.state.isAdmin,
