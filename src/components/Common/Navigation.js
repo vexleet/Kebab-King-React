@@ -35,7 +35,7 @@ class Navigation extends Component {
                                 <MDBNavLink to="/orders">My Orders</MDBNavLink>
                             </MDBNavItem>
                             <MDBNavItem className="navItemSize">
-                                <MDBNavLink to="/orders">Create new kebab</MDBNavLink>
+                                <MDBNavLink to="/create">Create new kebab</MDBNavLink>
                             </MDBNavItem>
                         </MDBNavbarNav>
                         <MDBNavbarNav right>
