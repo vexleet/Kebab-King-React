@@ -30,9 +30,22 @@ async function getKebabs() {
     return res.json();
 }
 
+async function createKebab(kebab, token) {
+    const res = await fetch(host + 'kebab/create', {
+        method: "post",
+        headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${token}`,
+        },
+        body: JSON.stringify(kebab),
+    });
+
+    return res.json();
+}
 
 export {
     registerUser,
     login,
     getKebabs,
+    createKebab,
 }

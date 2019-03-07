@@ -1,20 +1,58 @@
 import React, { Component } from 'react'
 import { MDBContainer, MDBRow, MDBCol, MDBBtn } from 'mdbreact';
+import { createKebab } from '../../api/remote';
+import createKebabValidator from '../../utils/createKebabValidator';
+import { createKebabValidateForm } from '../../utils/formValidators';
+import toastr from 'toastr';
 
 class Create extends Component {
     constructor(props) {
         super(props);
 
         this.state = {
-
+            name: "",
+            ingredients: "",
+            description: "",
+            price: 0,
+            size: "",
+            image: "",
         }
+
+        this.handleChange = this.handleChange.bind(this);
+        this.handleSubmit = this.handleSubmit.bind(this);
+    }
+
+    handleSubmit(e) {
+        e.preventDefault();
+        let kebab = Object.assign({}, this.state);
+
+        if (!createKebabValidator(kebab)) {
+            return;
+        }
+
+        let token = localStorage.getItem("token");
+        kebab.ingredients = kebab.ingredients.split(',');
+
+        createKebab(kebab, token)
+            .then((res) => {
+                if (!res.success) {
+                    toastr.error(res.message);
+                    return;
+                }
+
+                toastr.success(res.message);
+                this.props.updateKebabsState();
+                this.props.history.push("/");
+            });
     }
 
     handleChange(e) {
-
+        this.setState({ [e.target.name]: e.target.value });
     }
 
     render() {
+        const formObj = createKebabValidateForm(this.state);
+
         return (
             <MDBContainer className="marginTop col-centered">
                 <MDBRow className="center-block">
@@ -26,8 +64,8 @@ class Create extends Component {
                             <input
                                 type="text"
                                 id="defaultCreateFormNameEx"
-                                className="form-control"
-                                name="Name"
+                                className={formObj.validName() ? "form-control is-valid" : "form-control is-invalid"}
+                                name="name"
                                 onChange={this.handleChange}
                             />
                             <br />
@@ -36,7 +74,7 @@ class Create extends Component {
                             <input
                                 type="text"
                                 id="defaultFormCreateIngredientsEx"
-                                className="form-control"
+                                className={formObj.validIngredients() ? "form-control is-valid" : "form-control is-invalid"}
                                 name="ingredients"
                                 onChange={this.handleChange}
                             />
@@ -46,7 +84,7 @@ class Create extends Component {
                             <input
                                 type="text"
                                 id="defaultFormCreateDescriptionEx"
-                                className="form-control"
+                                className={formObj.validDescription() ? "form-control is-valid" : "form-control is-invalid"}
                                 name="description"
                                 onChange={this.handleChange}
                             />
@@ -56,7 +94,7 @@ class Create extends Component {
                             <input
                                 type="text"
                                 id="defaultFormCreateImageURLEx"
-                                className="form-control"
+                                className={formObj.validImage() ? "form-control is-valid" : "form-control is-invalid"}
                                 name="image"
                                 onChange={this.handleChange}
                             />
@@ -66,7 +104,7 @@ class Create extends Component {
                             <input
                                 type="text"
                                 id="defaultFormCreateSizeEx"
-                                className="form-control"
+                                className={formObj.validSize() ? "form-control is-valid" : "form-control is-invalid"}
                                 name="size"
                                 onChange={this.handleChange}
                             />
@@ -76,8 +114,8 @@ class Create extends Component {
                             <input
                                 type="number"
                                 id="defaultFormCreatePriceEx"
-                                className="form-control"
-                                name="Price"
+                                className={formObj.validPrice() ? "form-control is-valid" : "form-control is-invalid"}
+                                name="price"
                                 onChange={this.handleChange}
                             />
                             <div className="text-center mt-4">

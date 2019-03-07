@@ -33,6 +33,7 @@ class App extends Component {
 
     this.userHasAuthenticated = this.userHasAuthenticated.bind(this);
     this.logout = this.logout.bind(this);
+    this.updateKebabsState = this.updateKebabsState.bind(this);
   }
 
   userHasAuthenticated(authenticated, username, token, isAdmin) {
@@ -45,6 +46,10 @@ class App extends Component {
     localStorage.setItem("username", username);
     localStorage.setItem("token", token);
     localStorage.setItem("isAdmin", isAdmin);
+  }
+
+  updateKebabsState() {
+    getKebabs().then((kebabs) => this.setState({ kebabs }));
   }
 
   logout() {
@@ -73,7 +78,7 @@ class App extends Component {
       });
     }
 
-    getKebabs().then((kebabs) => this.setState({ kebabs }));
+    this.updateKebabsState();
   }
 
   render() {
@@ -94,6 +99,7 @@ class App extends Component {
       kebabs: this.state.kebabs,
       userHasAuthenticated: this.userHasAuthenticated,
       logout: this.logout,
+      updateKebabsState: this.updateKebabsState,
     };
 
     return (

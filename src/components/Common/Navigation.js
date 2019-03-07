@@ -35,13 +35,13 @@ class Navigation extends Component {
                                 <MDBNavLink to="/menu">Menu</MDBNavLink>
                             </MDBNavItem>
                             {isAdmin && <MDBNavItem className="navItemSize">
-                                <MDBNavLink to="/admin/orders">Approve Orders</MDBNavLink>
+                                <MDBNavLink to="/admin/orders">Pending Orders</MDBNavLink>
                             </MDBNavItem>}
                             {isAuthenticated && !isAdmin && <MDBNavItem className="navItemSize">
                                 <MDBNavLink to="/orders">My Orders</MDBNavLink>
                             </MDBNavItem>}
                             {isAdmin && <MDBNavItem className="navItemSize">
-                                <MDBNavLink to="/create">Create new kebab</MDBNavLink>
+                                <MDBNavLink to="/create">Create New Kebab</MDBNavLink>
                             </MDBNavItem>}
                         </MDBNavbarNav>
                         {!isAuthenticated && <MDBNavbarNav right>

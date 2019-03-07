@@ -52,7 +52,46 @@ function loginValidateForm(user) {
     }
 }
 
+function createKebabValidateForm(kebab) {
+    const { name, ingredients, description, image, size, price } = kebab;
+
+    let validName = () => {
+        return name.trim().length > 3;
+    }
+
+    let validSize = () => {
+        return size.trim().length > 3;
+    }
+
+    let validIngredients = () => {
+        return ingredients.length > 2 &&
+            ingredients.indexOf(', ') < 0;
+    }
+
+    let validDescription = () => {
+        return description.length >= 10 && description.length <= 200;
+    }
+
+    let validPrice = () => {
+        return price > 0;
+    }
+
+    let validImage = () => {
+        return (image.startsWith('https://') || image.startsWith('http://')) && image.length >= 14;
+    }
+
+    return {
+        validName,
+        validIngredients,
+        validSize,
+        validDescription,
+        validImage,
+        validPrice,
+    };
+}
+
 export {
     registerValidateForm,
     loginValidateForm,
+    createKebabValidateForm,
 }
