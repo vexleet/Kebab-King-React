@@ -1,7 +1,7 @@
 const host = 'http://localhost:5000/'
 
 async function registerUser(user) {
-    const res = await window.fetch(host + 'auth/signup', {
+    const res = await fetch(host + 'auth/signup', {
         method: "post",
         headers: {
             "Content-Type": "application/json",
@@ -13,7 +13,7 @@ async function registerUser(user) {
 }
 
 async function login(user) {
-    const res = await window.fetch(host + 'auth/login', {
+    const res = await fetch(host + 'auth/login', {
         method: "post",
         headers: {
             "Content-Type": "application/json",
@@ -24,8 +24,15 @@ async function login(user) {
     return res.json();
 }
 
+async function getKebabs() {
+    const res = await fetch(host + 'kebab/all');
+
+    return res.json();
+}
+
 
 export {
     registerUser,
     login,
+    getKebabs,
 }

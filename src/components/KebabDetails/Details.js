@@ -46,7 +46,7 @@ const Details = (props) => {
                         </MDBCol>
                         <MDBCol xl="10" md="11" size="10">
                             <h5 className="font-weight-bold mb-3">Price</h5>
-                            <p className="grey-text">{props.price}</p>
+                            <p className="grey-text">${props.price.toFixed(2)}</p>
                         </MDBCol>
                     </MDBRow>
                     <MDBRow className="mb-3">

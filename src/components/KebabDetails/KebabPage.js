@@ -1,20 +1,30 @@
-import React from "react";
+import React, { Component } from "react";
 import { MDBContainer } from "mdbreact";
 import InputReview from './InputReview';
 import Details from './Details';
+import Loading from '../Common/Loading/Loading';
 
-const FeaturesPage = () => {
-    return (
-        <MDBContainer className="marginTop">
-            <Details name={"Chicken Doner"}
-                description={"best doner in the world"}
-                price={"2.50"}
-                size={"Small"}
-                ingredients={["toasted bread", "chicken", "fried potatoes", "salad", "vegetables", "sauce of choice"]}
-                image={"http://kebap13.com/img/upload/thumbs/9558a1d6fcf4e8d8bdd655ee872f6fc3.jpg"} />
-            < InputReview />
-        </MDBContainer>
-    );
+class KebabPageDetails extends Component {
+    render() {
+        if (this.props.kebabs.length === 0) {
+            return <Loading />
+        }
+
+        let kebabs = this.props.kebabs;
+        let kebabId = this.props.match.params.id;
+        let kebab = kebabs.find((k) => k._id === kebabId);
+        return (
+            <MDBContainer className="marginTop">
+                <Details name={kebab.name}
+                    description={kebab.description}
+                    price={kebab.price}
+                    size={kebab.size}
+                    ingredients={kebab.ingredients}
+                    image={kebab.image} />
+                < InputReview />
+            </MDBContainer>
+        );
+    }
 }
 
-export default FeaturesPage;
+export default KebabPageDetails;

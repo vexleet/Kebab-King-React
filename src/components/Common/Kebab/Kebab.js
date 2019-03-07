@@ -1,5 +1,6 @@
 import React from 'react';
 import { MDBCol, MDBMask, MDBView, MDBBtn } from "mdbreact";
+import { Link } from 'react-router-dom';
 
 const KebabCol = (props) => {
     let kebab = props.kebab;
@@ -12,7 +13,7 @@ const KebabCol = (props) => {
             <h4 className="font-weight-bold mb-3"><strong>{kebab.name}</strong></h4>
             <p className="dark-grey-text">{kebab.description}</p>
             <MDBBtn color="orange" rounded size="md">Order</MDBBtn>
-            <MDBBtn color="blue" rounded size="md">Details</MDBBtn>
+            <Link className="white-text blue btn btn-blue btn-md btn-rounded Ripple-parent" to={`/details/${kebab._id}`}>Details</Link>
             {/* <MDBBtn color="orange" rounded size="md">Edit</MDBBtn>
     <MDBBtn color="red" rounded size="md">Delete</MDBBtn> */}
         </MDBCol>)

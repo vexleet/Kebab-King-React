@@ -17,6 +17,7 @@ import AppliedRoute from './components/Routes/AppliedRoute';
 import AdminRoute from './components/Routes/AdminRoute';
 import PrivateRoute from './components/Routes/PrivateRoute';
 import toastr from 'toastr';
+import { getKebabs } from './api/remote';
 
 class App extends Component {
   constructor(props) {
@@ -27,6 +28,7 @@ class App extends Component {
       isAuthenticated: false,
       isAdmin: false,
       isLoading: true,
+      kebabs: [],
     }
 
     this.userHasAuthenticated = this.userHasAuthenticated.bind(this);
@@ -71,7 +73,7 @@ class App extends Component {
       });
     }
 
-    //TODO: Fetch kebabs
+    getKebabs().then((kebabs) => this.setState({ kebabs }));
   }
 
   render() {
@@ -89,6 +91,7 @@ class App extends Component {
       isAuthenticated: this.state.isAuthenticated,
       isAdmin: this.state.isAdmin,
       username: this.state.username,
+      kebabs: this.state.kebabs,
       userHasAuthenticated: this.userHasAuthenticated,
       logout: this.logout,
     };
@@ -98,14 +101,14 @@ class App extends Component {
         <Navigation {...childProps} />
         <Switch>
           <AppliedRoute exact path='/' component={Home} props={childProps} />
-          <AppliedRoute path='/menu' component={Home} />
+          <AppliedRoute path='/menu' component={Home} props={childProps} />
           <AppliedRoute path='/register' component={Register} props={childProps} />
           <AppliedRoute path='/login' component={Login} props={childProps} />
           <AdminRoute path='/admin/orders' component={AdminOrders} props={childProps} />
           <AdminRoute path='/create' component={Create} props={childProps} />
           <PrivateRoute path='/cart' component={Cart} props={childProps} />
           <PrivateRoute path='/orders' component={UserOrders} props={childProps} />
-          <PrivateRoute path='/details' component={KebabDetails} props={childProps} />
+          <PrivateRoute path='/details/:id' component={KebabDetails} props={childProps} />
           <AppliedRoute component={NotFound} />
         </Switch>
         <Footer />
