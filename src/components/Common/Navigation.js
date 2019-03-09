@@ -38,6 +38,9 @@ class Navigation extends Component {
                                 <MDBNavLink to="/admin/orders">Pending Orders</MDBNavLink>
                             </MDBNavItem>}
                             {isAuthenticated && !isAdmin && <MDBNavItem className="navItemSize">
+                                <MDBNavLink to="/cart">Cart</MDBNavLink>
+                            </MDBNavItem>}
+                            {isAuthenticated && !isAdmin && <MDBNavItem className="navItemSize">
                                 <MDBNavLink to="/orders">My Orders</MDBNavLink>
                             </MDBNavItem>}
                             {isAdmin && <MDBNavItem className="navItemSize">

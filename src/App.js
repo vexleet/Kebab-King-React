@@ -29,11 +29,13 @@ class App extends Component {
       isAdmin: false,
       isLoading: true,
       kebabs: [],
+      orders: [],
     }
 
     this.userHasAuthenticated = this.userHasAuthenticated.bind(this);
     this.logout = this.logout.bind(this);
     this.updateKebabsState = this.updateKebabsState.bind(this);
+    this.addOrder = this.addOrder.bind(this);
   }
 
   userHasAuthenticated(authenticated, username, token, isAdmin) {
@@ -50,6 +52,19 @@ class App extends Component {
 
   updateKebabsState() {
     getKebabs().then((kebabs) => this.setState({ kebabs }));
+  }
+
+  addOrder(kebab) {
+    let orders = this.state.orders.slice();
+
+    if (orders.indexOf(kebab) < 0) {
+      kebab.qty = "1";
+      orders.push(kebab);
+      this.setState({ orders: orders });
+      this.props.history.push('/cart');
+      return;
+    }
+    toastr.error("Kebab already in cart");
   }
 
   logout() {
@@ -91,15 +106,16 @@ class App extends Component {
         </div>
       )
     }
-
     const childProps = {
       isAuthenticated: this.state.isAuthenticated,
       isAdmin: this.state.isAdmin,
       username: this.state.username,
       kebabs: this.state.kebabs,
+      orders: this.state.orders,
       userHasAuthenticated: this.userHasAuthenticated,
       logout: this.logout,
       updateKebabsState: this.updateKebabsState,
+      addOrder: this.addOrder,
     };
 
     return (

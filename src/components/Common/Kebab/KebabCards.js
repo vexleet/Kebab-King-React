@@ -9,7 +9,7 @@ const KebabCard = (props) => {
         <MDBCard className="my-5 px-5 pb-5 container">
             <MDBCardBody className="text-center">
                 <MDBRow>
-                    {kebabs.map((kebab, index) => <Kebab key={index} kebab={kebab} />)}
+                    {kebabs.map((kebab, index) => <Kebab key={index} kebab={kebab} addOrder={props.addOrder} />)}
                 </MDBRow>
             </MDBCardBody>
         </MDBCard>
