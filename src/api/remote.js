@@ -43,9 +43,49 @@ async function createKebab(kebab, token) {
     return res.json();
 }
 
+async function likeKebab(kebabId, token) {
+    const res = await fetch(host + `kebab/like/${kebabId}`, {
+        method: "post",
+        headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${token}`,
+        },
+    });
+
+    return res.json();
+}
+
+async function unlikeKebab(kebabId, token) {
+    const res = await fetch(host + `kebab/unlike/${kebabId}`, {
+        method: "post",
+        headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${token}`,
+        },
+    });
+
+    return res.json();
+}
+
+async function postReview(kebabId, review, token) {
+    const res = await fetch(host + `kebab/review/${kebabId}`, {
+        method: "post",
+        headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${token}`,
+        },
+        body: JSON.stringify({ review }),
+    });
+
+    return res.json();
+}
+
 export {
     registerUser,
     login,
     getKebabs,
     createKebab,
+    likeKebab,
+    unlikeKebab,
+    postReview,
 }

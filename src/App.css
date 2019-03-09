@@ -1,3 +1,9 @@
+body::after {
+  content: '';
+  display: block;
+  height: 60px; /* Set same as footer's height */
+}
+
 a.nav-link {
   display: inline-block;
   color: rgb(255, 255, 255, 0.75);
