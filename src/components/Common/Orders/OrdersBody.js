@@ -5,10 +5,13 @@ const OrdersBody = (props) => {
     return (
         <MDBTableBody>
             {props.orders.map((order, index) => {
+                let total = order.products.reduce((accumulator, currentValue) =>
+                    accumulator + currentValue.price * currentValue.qty, 0);
+
                 return <tr key={index}>
                     <td>{index + 1}</td>
                     <td>{order.date}</td>
-                    <td>{order.total}</td>
+                    <td>{total.toFixed(2)}</td>
                     <td>{order.status}</td>
                     <td><MDBBtn color="orange" rounded size="md">View</MDBBtn>
                     </td>

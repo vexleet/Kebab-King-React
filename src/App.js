@@ -17,7 +17,7 @@ import AppliedRoute from './components/Routes/AppliedRoute';
 import AdminRoute from './components/Routes/AdminRoute';
 import PrivateRoute from './components/Routes/PrivateRoute';
 import toastr from 'toastr';
-import { getKebabs } from './api/remote';
+import { getKebabs, getOrders } from './api/remote';
 
 class App extends Component {
   constructor(props) {
@@ -30,6 +30,7 @@ class App extends Component {
       isLoading: true,
       kebabs: [],
       orders: [],
+      cartOrders: [],
     }
 
     this.userHasAuthenticated = this.userHasAuthenticated.bind(this);
@@ -38,6 +39,8 @@ class App extends Component {
     this.addOrder = this.addOrder.bind(this);
     this.removeOrder = this.removeOrder.bind(this);
     this.changeQuantityOfProduct = this.changeQuantityOfProduct.bind(this);
+    this.clearCartState = this.clearCartState.bind(this);
+    this.updateOrdersState = this.updateOrdersState.bind(this);
   }
 
   userHasAuthenticated(authenticated, username, token, isAdmin) {
@@ -56,31 +59,39 @@ class App extends Component {
     getKebabs().then((kebabs) => this.setState({ kebabs }));
   }
 
-  addOrder(kebab) {
-    let orders = this.state.orders.slice();
+  updateOrdersState() {
+    getOrders().then((orders) => this.setState({ orders }));
+  }
 
-    if (orders.indexOf(kebab) < 0) {
+  clearCartState() {
+    this.setState({ cartOrders: [] });
+  }
+
+  addOrder(kebab) {
+    let cartOrders = this.state.cartOrders.slice();
+
+    if (cartOrders.indexOf(kebab) < 0) {
       kebab.qty = "1";
-      orders.push(kebab);
-      this.setState({ orders: orders });
+      cartOrders.push(kebab);
+      this.setState({ cartOrders: cartOrders });
       this.props.history.push('/cart');
       return;
     }
     toastr.error("Kebab already in cart");
   }
 
-  removeOrder(kebab) {
-    let orders = this.state.orders.slice();
-    let indexOfOrder = orders.indexOf(kebab);
-    orders.splice(indexOfOrder, 1);
-    this.setState({ orders: orders });
+  removeOrder(order) {
+    let cartOrders = this.state.cartOrders.slice();
+    let indexOfOrder = cartOrders.indexOf(order);
+    cartOrders.splice(indexOfOrder, 1);
+    this.setState({ cartOrders: cartOrders });
   }
 
-  changeQuantityOfProduct(kebab, qty) {
-    let orders = this.state.orders.slice();
-    let indexOfOrder = orders.indexOf(kebab);
-    orders[indexOfOrder].qty = qty;
-    this.setState({ orders: orders });
+  changeQuantityOfProduct(order, qty) {
+    let cartOrders = this.state.cartOrders.slice();
+    let indexOfOrder = cartOrders.indexOf(order);
+    cartOrders[indexOfOrder].qty = qty;
+    this.setState({ cartOrders: cartOrders });
   }
 
   logout() {
@@ -110,6 +121,7 @@ class App extends Component {
     }
 
     this.updateKebabsState();
+    this.updateOrdersState();
   }
 
   render() {
@@ -128,12 +140,15 @@ class App extends Component {
       username: this.state.username,
       kebabs: this.state.kebabs,
       orders: this.state.orders,
+      cartOrders: this.state.cartOrders,
       userHasAuthenticated: this.userHasAuthenticated,
       logout: this.logout,
       updateKebabsState: this.updateKebabsState,
       addOrder: this.addOrder,
       removeOrder: this.removeOrder,
       changeQuantityOfProduct: this.changeQuantityOfProduct,
+      clearCartState: this.clearCartState,
+      updateOrdersState: this.updateOrdersState,
     };
 
     return (

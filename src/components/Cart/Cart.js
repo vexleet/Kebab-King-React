@@ -1,23 +1,37 @@
 import React, { Component } from 'react';
+import { createOrder } from '../../api/remote';
 import { Link } from 'react-router-dom';
-
+import toastr from 'toastr';
 class Cart extends Component {
     handleRemove() {
-        let kebab = this[1];
+        let order = this[1];
 
-        this[0].props.removeOrder(kebab);
+        this[0].props.removeOrder(order);
     }
 
     handleChangeOfQuantity(e) {
         let qtyValue = e.target.value;
-        let kebab = this[1];
+        let order = this[1];
 
-        this[0].props.changeQuantityOfProduct(kebab, qtyValue);
+        this[0].props.changeQuantityOfProduct(order, qtyValue);
+    }
+
+    handlePurchase() {
+        let orders = this[1];
+        let token = localStorage.getItem("token");
+
+        createOrder(orders, token)
+            .then((res) => {
+                toastr.success(res.message);
+                this[0].props.clearCartState();
+                this[0].props.updateOrdersState();
+                this[0].props.history.push('/orders');
+            });
     }
 
     render() {
-        let kebabs = this.props.orders;
-        let total = kebabs.reduce((accumulator, currentValue) =>
+        let orders = this.props.cartOrders;
+        let total = orders.reduce((accumulator, currentValue) =>
             accumulator + currentValue.price * currentValue.qty, 0);
 
         return (
@@ -48,33 +62,33 @@ class Cart extends Component {
                                 </tr>
                             </thead>
                             <tbody>
-                                {kebabs.map((kebab) => {
-                                    return <tr key={kebab._id}>
+                                {orders.map((order) => {
+                                    return <tr key={order._id}>
                                         <th scope="row">
-                                            <img src={kebab.image} className="img-fluid z-depth-0" />
+                                            <img src={order.image} className="img-fluid z-depth-0" />
                                         </th>
                                         <td>
-                                            <h5 className="mt-3"><strong>{kebab.name}</strong></h5>
+                                            <h5 className="mt-3"><strong>{order.name}</strong></h5>
                                         </td>
-                                        <td>{kebab.size}</td>
+                                        <td>{order.size}</td>
                                         <td />
-                                        <td>${kebab.price}</td>
+                                        <td>${order.price}</td>
                                         <td>
-                                            <input type="number" defaultValue={kebab.qty} min="1" aria-label="Search" className="form-control" style={{ width: '100px' }} onChange={this.handleChangeOfQuantity.bind([this, kebab])} />
+                                            <input type="number" defaultValue={order.qty} min="1" aria-label="Search" className="form-control" style={{ width: '100px' }} onChange={this.handleChangeOfQuantity.bind([this, order])} />
                                         </td>
                                         <td className="font-weight-bold">
-                                            <strong>${(kebab.qty * kebab.price).toFixed(2)}</strong>
+                                            <strong>${(order.qty * order.price).toFixed(2)}</strong>
                                         </td>
                                         <td>
                                             <button type="button"
-                                                className="btn btn-sm btn-primary" data-toggle="tooltip" data-placement="top" title="Remove item" onClick={this.handleRemove.bind([this, kebab])}>X</button>
+                                                className="btn btn-sm btn-primary" data-toggle="tooltip" data-placement="top" title="Remove item" onClick={this.handleRemove.bind([this, order])}>X</button>
                                         </td>
                                     </tr>
                                 })}
                                 <tr>
                                     <td colSpan={3} className="text-left">
                                         <Link className="btn btn-primary btn-rounded orange darken-1"
-                                            to='/'>Continue Shopping</Link>
+                                            to='/menu'>Continue Shopping</Link>
                                     </td>
                                     <td>
                                         <h4 className="mt-2"><strong>Total</strong></h4>
@@ -83,7 +97,7 @@ class Cart extends Component {
                                         <h4 className="mt-2"><strong>${total.toFixed(2)}</strong></h4>
                                     </td>
                                     <td colSpan={3} className="text-right">
-                                        <button type="button" className="btn btn-primary btn-rounded">
+                                        <button type="button" className="btn btn-primary btn-rounded" onClick={this.handlePurchase.bind([this, orders])}>
                                             Complete purchase
                                         </button>
                                     </td>
