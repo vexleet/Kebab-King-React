@@ -36,6 +36,8 @@ class App extends Component {
     this.logout = this.logout.bind(this);
     this.updateKebabsState = this.updateKebabsState.bind(this);
     this.addOrder = this.addOrder.bind(this);
+    this.removeOrder = this.removeOrder.bind(this);
+    this.changeQuantityOfProduct = this.changeQuantityOfProduct.bind(this);
   }
 
   userHasAuthenticated(authenticated, username, token, isAdmin) {
@@ -65,6 +67,20 @@ class App extends Component {
       return;
     }
     toastr.error("Kebab already in cart");
+  }
+
+  removeOrder(kebab) {
+    let orders = this.state.orders.slice();
+    let indexOfOrder = orders.indexOf(kebab);
+    orders.splice(indexOfOrder, 1);
+    this.setState({ orders: orders });
+  }
+
+  changeQuantityOfProduct(kebab, qty) {
+    let orders = this.state.orders.slice();
+    let indexOfOrder = orders.indexOf(kebab);
+    orders[indexOfOrder].qty = qty;
+    this.setState({ orders: orders });
   }
 
   logout() {
@@ -116,6 +132,8 @@ class App extends Component {
       logout: this.logout,
       updateKebabsState: this.updateKebabsState,
       addOrder: this.addOrder,
+      removeOrder: this.removeOrder,
+      changeQuantityOfProduct: this.changeQuantityOfProduct,
     };
 
     return (
