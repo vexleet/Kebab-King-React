@@ -105,6 +105,19 @@ async function postReview(kebabId, review, token) {
     return res.json();
 }
 
+async function deleteKebab(kebabId) {
+    let token = localStorage.getItem("token");
+    const res = await fetch(host + `kebab/delete/${kebabId}`, {
+        method: "delete",
+        headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${token}`,
+        },
+    });
+
+    return res.json();
+}
+
 export {
     registerUser,
     login,
@@ -114,5 +127,6 @@ export {
     unlikeKebab,
     postReview,
     createOrder,
-    getOrders
+    getOrders,
+    deleteKebab,
 }

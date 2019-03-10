@@ -5,11 +5,14 @@ import Kebab from './Kebab';
 
 const KebabCard = (props) => {
     let kebabs = props.kebabs;
+    let { isAdmin, isAuthenticated, updateKebabsState } = props;
     return (
         <MDBCard className="my-5 px-5 pb-5 container">
             <MDBCardBody className="text-center">
                 <MDBRow>
-                    {kebabs.map((kebab, index) => <Kebab key={index} kebab={kebab} addOrder={props.addOrder} />)}
+                    {kebabs.map((kebab, index) => <Kebab key={index} kebab={kebab} isAdmin={isAdmin}
+                        isAuthenticated={isAuthenticated} addOrder={props.addOrder}
+                        updateKebabsState={updateKebabsState} />)}
                 </MDBRow>
             </MDBCardBody>
         </MDBCard>
