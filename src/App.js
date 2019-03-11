@@ -18,7 +18,7 @@ import AdminRoute from './components/Routes/AdminRoute';
 import PrivateRoute from './components/Routes/PrivateRoute';
 import Edit from './components/Edit/Edit';
 import toastr from 'toastr';
-import { getKebabs, getOrders } from './api/remote';
+import { getKebabs, getOrders, pendingOrders } from './api/remote';
 
 class App extends Component {
   constructor(props) {
@@ -54,14 +54,21 @@ class App extends Component {
     localStorage.setItem("username", username);
     localStorage.setItem("token", token);
     localStorage.setItem("isAdmin", isAdmin);
+
+    this.updateOrdersState(isAdmin);
   }
 
   updateKebabsState() {
     getKebabs().then((kebabs) => this.setState({ kebabs }));
   }
 
-  updateOrdersState() {
-    getOrders().then((orders) => this.setState({ orders }));
+  updateOrdersState(isAdmin = false) {
+    if (isAdmin) {
+      pendingOrders().then((orders) => this.setState({ orders }));
+    }
+    else {
+      getOrders().then((orders) => this.setState({ orders }));
+    }
   }
 
   clearCartState() {
@@ -113,16 +120,10 @@ class App extends Component {
       let username = localStorage.getItem("username");
       let isAdmin = localStorage.getItem("isAdmin") === "true";
 
-      this.setState({
-        username: username,
-        isAdmin: isAdmin,
-        isAuthenticated: true,
-        isLoading: false,
-      });
+      this.userHasAuthenticated(true, username, token, isAdmin);
     }
-
+    this.setState({ isLoading: false });
     this.updateKebabsState();
-    this.updateOrdersState();
   }
 
   render() {

@@ -68,6 +68,29 @@ async function getOrders() {
     return res.json();
 }
 
+async function pendingOrders() {
+    let token = localStorage.getItem("token");
+    const res = await fetch(host + 'orders/pending', {
+        headers: {
+            "Authorization": `Bearer ${token}`,
+        }
+    });
+
+    return res.json();
+}
+
+async function approveOrder(orderId) {
+    let token = localStorage.getItem("token");
+    const res = await fetch(host + `orders/approve/${orderId}`, {
+        method: "post",
+        headers: {
+            "Authorization": `Bearer ${token}`,
+        }
+    });
+
+    return res.json();
+}
+
 async function likeKebab(kebabId, token) {
     const res = await fetch(host + `kebab/like/${kebabId}`, {
         method: "post",
@@ -139,6 +162,8 @@ export {
     postReview,
     createOrder,
     getOrders,
+    pendingOrders,
+    approveOrder,
     deleteKebab,
     editKebab,
 }

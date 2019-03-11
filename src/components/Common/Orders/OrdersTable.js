@@ -16,7 +16,8 @@ const BasicTable = (props) => {
                         {props.isAdmin && <th>Approve</th>}
                     </tr>
                 </MDBTableHead>
-                <OrderBody orders={props.orders} isAdmin={props.isAdmin} />
+                <OrderBody orders={props.orders} isAdmin={props.isAdmin}
+                    handleApprove={props.handleApprove} updateOrdersState={props.updateOrdersState} />
             </MDBTable>
         </MDBContainer>
     );

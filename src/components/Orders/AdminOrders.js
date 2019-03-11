@@ -1,28 +1,26 @@
-import React from 'react';
+import React, { Component } from 'react';
 import OrdersTable from "../Common/Orders/OrdersTable";
+import { approveOrder } from '../../api/remote';
+import toastr from 'toastr';
 
-let orders = [
-    {
-        date: Date.now(),
-        total: 100,
-        status: "Pending",
-    },
-    {
-        date: Date.now(),
-        total: 2500,
-        status: "Pending",
-    },
-    {
-        date: Date.now(),
-        total: 2300,
-        status: "Pending",
+class AdminOrders extends Component {
+    handleApprove() {
+        let orderId = this[1];
+
+        approveOrder(orderId)
+            .then((res) => {
+                toastr.success(res.message);
+                this[0].updateOrdersState(true);
+            })
     }
-]
 
-const AdminOrders = (props) => {
-    return (
-        <OrdersTable orders={orders} isAdmin={true} />
-    );
+    render() {
+        const { orders, updateOrdersState } = this.props;
+        return (
+            <OrdersTable orders={orders} isAdmin={true}
+                updateOrdersState={updateOrdersState} handleApprove={this.handleApprove} />
+        );
+    }
 }
 
 export default AdminOrders;

@@ -15,7 +15,9 @@ const OrdersBody = (props) => {
                     <td>{order.status}</td>
                     <td><MDBBtn color="orange" rounded size="md">View</MDBBtn>
                     </td>
-                    {props.isAdmin && <td><MDBBtn color="green" rounded size="md">Approve</MDBBtn></td>}
+                    {props.isAdmin && <td><MDBBtn color="green"
+                        rounded size="md"
+                        onClick={props.handleApprove.bind([props, order._id])}>Approve</MDBBtn></td>}
                 </tr>
             })}
         </MDBTableBody>
