@@ -30,6 +30,12 @@ async function getKebabs() {
     return res.json();
 }
 
+async function getStats() {
+    const res = await fetch(host + 'stats');
+
+    return res.json()
+}
+
 async function createKebab(kebab, token) {
     const res = await fetch(host + 'kebab/create', {
         method: "post",
@@ -156,6 +162,7 @@ export {
     registerUser,
     login,
     getKebabs,
+    getStats,
     createKebab,
     likeKebab,
     unlikeKebab,

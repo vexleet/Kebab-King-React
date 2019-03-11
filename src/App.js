@@ -4,6 +4,7 @@ import Footer from './components/Common/Footer';
 import Navigation from './components/Common/Navigation';
 import { withRouter, Switch } from 'react-router-dom';
 import Home from './components/Home/Home';
+import Menu from './components/Menu/Menu';
 import Register from './components/Auth/Register';
 import Login from './components/Auth/Login';
 import Cart from './components/Cart/Cart';
@@ -18,7 +19,7 @@ import AdminRoute from './components/Routes/AdminRoute';
 import PrivateRoute from './components/Routes/PrivateRoute';
 import Edit from './components/Edit/Edit';
 import toastr from 'toastr';
-import { getKebabs, getOrders, pendingOrders } from './api/remote';
+import { getKebabs, getOrders, pendingOrders, getStats } from './api/remote';
 
 class App extends Component {
   constructor(props) {
@@ -32,6 +33,7 @@ class App extends Component {
       kebabs: [],
       orders: [],
       cartOrders: [],
+      stats: [],
     }
 
     this.userHasAuthenticated = this.userHasAuthenticated.bind(this);
@@ -55,6 +57,7 @@ class App extends Component {
     localStorage.setItem("token", token);
     localStorage.setItem("isAdmin", isAdmin);
 
+    getStats().then((s) => this.setState({ stats: s }));
     this.updateOrdersState(isAdmin);
   }
 
@@ -127,15 +130,6 @@ class App extends Component {
   }
 
   render() {
-    if (this.state.isLoading) {
-      return (
-        <div className="App">
-          <Navigation {...childProps} />
-          <Loading />
-          <Footer />
-        </div>
-      )
-    }
     const childProps = {
       isAuthenticated: this.state.isAuthenticated,
       isAdmin: this.state.isAdmin,
@@ -143,6 +137,7 @@ class App extends Component {
       kebabs: this.state.kebabs,
       orders: this.state.orders,
       cartOrders: this.state.cartOrders,
+      stats: this.state.stats,
       userHasAuthenticated: this.userHasAuthenticated,
       logout: this.logout,
       updateKebabsState: this.updateKebabsState,
@@ -153,12 +148,23 @@ class App extends Component {
       updateOrdersState: this.updateOrdersState,
     };
 
+    if (this.state.isLoading) {
+      return (
+        <div className="App">
+          <Navigation {...childProps} />
+          <Loading />
+          <Footer />
+        </div>
+      )
+    }
+
     return (
       <div className="App">
         <Navigation {...childProps} />
         <Switch>
           <AppliedRoute exact path='/' component={Home} props={childProps} />
-          <AppliedRoute path='/menu' component={Home} props={childProps} />
+          <AppliedRoute exact path='/menu' component={Menu} props={childProps} />
+          <AppliedRoute exact path='/menu/:page' component={Menu} props={childProps} />
           <AppliedRoute path='/register' component={Register} props={childProps} />
           <AppliedRoute path='/login' component={Login} props={childProps} />
           <AdminRoute path='/admin/orders' component={AdminOrders} props={childProps} />
