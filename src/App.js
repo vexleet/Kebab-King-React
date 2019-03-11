@@ -16,6 +16,7 @@ import Loading from './components/Common/Loading/Loading';
 import AppliedRoute from './components/Routes/AppliedRoute';
 import AdminRoute from './components/Routes/AdminRoute';
 import PrivateRoute from './components/Routes/PrivateRoute';
+import Edit from './components/Edit/Edit';
 import toastr from 'toastr';
 import { getKebabs, getOrders } from './api/remote';
 
@@ -161,6 +162,7 @@ class App extends Component {
           <AppliedRoute path='/login' component={Login} props={childProps} />
           <AdminRoute path='/admin/orders' component={AdminOrders} props={childProps} />
           <AdminRoute path='/create' component={Create} props={childProps} />
+          <AdminRoute path='/edit/:id' component={Edit} props={childProps} />
           <PrivateRoute path='/cart' component={Cart} props={childProps} />
           <PrivateRoute path='/orders' component={UserOrders} props={childProps} />
           <PrivateRoute path='/details/:id' component={KebabDetails} props={childProps} />

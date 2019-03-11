@@ -57,7 +57,8 @@ class KebabCol extends Component {
                     </div>}
                 {isAdmin &&
                     <div>
-                        <MDBBtn color="orange" rounded size="md">Edit</MDBBtn>
+                        <Link className="white-text blue btn btn-blue btn-md btn-rounded Ripple-parent orange darken-1"
+                            to={`/edit/${kebab._id}`}>Edit</Link>
                         <MDBBtn color="red" rounded size="md" onClick={this.toggle}>Delete</MDBBtn>
                         <Delete toggle={this.toggle} modal={this.state.modal}
                             handleDelete={this.handleDelete} />

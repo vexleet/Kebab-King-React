@@ -105,8 +105,8 @@ router.post('/edit/:id', authCheck, (req, res) => {
       .findById(kebabId)
       .then(existingKebab => {
         existingKebab.name = kebabObj.name
-        existingKebab.author = kebabObj.author
-        existingKebab.genres = kebabObj.genres
+        existingKebab.ingredients = kebabObj.ingredients
+        existingKebab.size = kebabObj.size
         existingKebab.description = kebabObj.description
         existingKebab.price = kebabObj.price
         existingKebab.image = kebabObj.image

@@ -72,7 +72,6 @@ async function likeKebab(kebabId, token) {
     const res = await fetch(host + `kebab/like/${kebabId}`, {
         method: "post",
         headers: {
-            "Content-Type": "application/json",
             "Authorization": `Bearer ${token}`,
         },
     });
@@ -84,7 +83,6 @@ async function unlikeKebab(kebabId, token) {
     const res = await fetch(host + `kebab/unlike/${kebabId}`, {
         method: "post",
         headers: {
-            "Content-Type": "application/json",
             "Authorization": `Bearer ${token}`,
         },
     });
@@ -110,9 +108,22 @@ async function deleteKebab(kebabId) {
     const res = await fetch(host + `kebab/delete/${kebabId}`, {
         method: "delete",
         headers: {
+            "Authorization": `Bearer ${token}`,
+        },
+    });
+
+    return res.json();
+}
+
+async function editKebab(kebabId, kebab) {
+    let token = localStorage.getItem("token");
+    const res = await fetch(host + `kebab/edit/${kebabId}`, {
+        method: "post",
+        headers: {
             "Content-Type": "application/json",
             "Authorization": `Bearer ${token}`,
         },
+        body: JSON.stringify(kebab),
     });
 
     return res.json();
@@ -129,4 +140,5 @@ export {
     createOrder,
     getOrders,
     deleteKebab,
+    editKebab,
 }
