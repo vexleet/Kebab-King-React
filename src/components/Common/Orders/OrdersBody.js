@@ -1,5 +1,6 @@
 import React from 'react'
 import { MDBTableBody, MDBBtn } from 'mdbreact';
+import { Link } from 'react-router-dom';
 
 const OrdersBody = (props) => {
     return (
@@ -10,10 +11,11 @@ const OrdersBody = (props) => {
 
                 return <tr key={index}>
                     <td>{index + 1}</td>
-                    <td>{order.date}</td>
+                    <td>{new Date(order.date).toLocaleString()}</td>
                     <td>{total.toFixed(2)}</td>
                     <td>{order.status}</td>
-                    <td><MDBBtn color="orange" rounded size="md">View</MDBBtn>
+                    <td><Link to={`/orders/${order._id}`}
+                        className="white-text orange darken-1 btn btn-blue btn-md btn-rounded Ripple-parent">View</Link>
                     </td>
                     {props.isAdmin && <td><MDBBtn color="green"
                         rounded size="md"

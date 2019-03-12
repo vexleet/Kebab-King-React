@@ -10,6 +10,7 @@ import Login from './components/Auth/Login';
 import Cart from './components/Cart/Cart';
 import UserOrders from './components/Orders/UserOrders';
 import AdminOrders from './components/Orders/AdminOrders';
+import OrderDetailsPage from './components/Orders/OrderDetailsPage';
 import KebabDetails from './components/KebabDetails/KebabPage';
 import Create from './components/Create/Create';
 import NotFound from './components/Common/NotFound/NotFound';
@@ -171,7 +172,8 @@ class App extends Component {
           <AdminRoute path='/create' component={Create} props={childProps} />
           <AdminRoute path='/edit/:id' component={Edit} props={childProps} />
           <PrivateRoute path='/cart' component={Cart} props={childProps} />
-          <PrivateRoute path='/orders' component={UserOrders} props={childProps} />
+          <PrivateRoute exact path='/orders' component={UserOrders} props={childProps} />
+          <PrivateRoute exact path='/orders/:id' component={OrderDetailsPage} props={childProps} />
           <PrivateRoute path='/details/:id' component={KebabDetails} props={childProps} />
           <AppliedRoute component={NotFound} />
         </Switch>
