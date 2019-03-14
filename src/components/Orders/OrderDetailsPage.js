@@ -9,7 +9,6 @@ class OrdersBody extends Component {
     }
 
     render() {
-        console.log(this.props);
         if (this.props.orders.length === 0) {
             return <Loading />
         }
@@ -40,7 +39,6 @@ class OrdersBody extends Component {
                             <th>Price</th>
                             <th>Quantity</th>
                             <th>Subtotal</th>
-                            {this.props.isAdmin && <th>Approve</th>}
                         </tr>
                     </MDBTableHead>
                     <tbody>

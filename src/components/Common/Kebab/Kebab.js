@@ -30,6 +30,7 @@ class KebabCol extends Component {
             .then((res) => {
                 toastr.success(res.message);
                 this.props.updateKebabsState();
+                this.props.updateStatsState();
                 this.toggle();
             });
     }

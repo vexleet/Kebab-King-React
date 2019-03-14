@@ -17,7 +17,7 @@ class MenuPage extends Component {
     }
 
     render() {
-        let { kebabs, stats, addOrder, isAdmin, isAuthenticated, updateKebabsState } = this.props
+        let { kebabs, stats, addOrder, isAdmin, isAuthenticated, updateKebabsState, updateStatsState } = this.props
         let kebabsCount = stats.products;
         const page = Number(this.props.match.params.page) || 1;
 
@@ -50,7 +50,7 @@ class MenuPage extends Component {
                 </div>
                 <KebabCards kebabs={kebabs} addOrder={addOrder}
                     isAdmin={isAdmin} isAuthenticated={isAuthenticated}
-                    updateKebabsState={updateKebabsState} />
+                    updateKebabsState={updateKebabsState} updateStatsState={updateStatsState} />
                 <Paginator
                     kebabsCount={kebabsCount}
                     pageSize={pageSize}

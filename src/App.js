@@ -45,6 +45,7 @@ class App extends Component {
     this.changeQuantityOfProduct = this.changeQuantityOfProduct.bind(this);
     this.clearCartState = this.clearCartState.bind(this);
     this.updateOrdersState = this.updateOrdersState.bind(this);
+    this.updateStatsState = this.updateStatsState.bind(this);
   }
 
   userHasAuthenticated(authenticated, username, token, isAdmin) {
@@ -58,12 +59,16 @@ class App extends Component {
     localStorage.setItem("token", token);
     localStorage.setItem("isAdmin", isAdmin);
 
-    getStats().then((s) => this.setState({ stats: s }));
+    this.updateStatsState();
     this.updateOrdersState(isAdmin);
   }
 
   updateKebabsState() {
     getKebabs().then((kebabs) => this.setState({ kebabs }));
+  }
+
+  updateStatsState() {
+    getStats().then((s) => this.setState({ stats: s }));
   }
 
   updateOrdersState(isAdmin = false) {
@@ -147,6 +152,7 @@ class App extends Component {
       changeQuantityOfProduct: this.changeQuantityOfProduct,
       clearCartState: this.clearCartState,
       updateOrdersState: this.updateOrdersState,
+      updateStatsState: this.updateStatsState,
     };
 
     if (this.state.isLoading) {

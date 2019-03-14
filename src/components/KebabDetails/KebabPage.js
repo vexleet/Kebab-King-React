@@ -11,9 +11,8 @@ class KebabPageDetails extends Component {
 
     handleLike() {
         const kebabId = this[1];
-        const token = localStorage.getItem("token");
 
-        likeKebab(kebabId, token)
+        likeKebab(kebabId)
             .then(() => {
                 this[0].props.updateKebabsState();
                 toastr.success("Kebab liked successfully");
@@ -22,9 +21,8 @@ class KebabPageDetails extends Component {
 
     handleUnlike() {
         const kebabId = this[1];
-        const token = localStorage.getItem("token");
 
-        unlikeKebab(kebabId, token)
+        unlikeKebab(kebabId)
             .then(() => {
                 this[0].props.updateKebabsState();
                 toastr.success("Kebab unliked successfully");
@@ -33,9 +31,8 @@ class KebabPageDetails extends Component {
 
     handleReview(review) {
         const kebabId = this[1];
-        const token = localStorage.getItem("token");
 
-        postReview(kebabId, review, token)
+        postReview(kebabId, review)
             .then((res) => {
                 this[0].props.updateKebabsState();
                 toastr.success(res.message);

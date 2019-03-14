@@ -1,5 +1,5 @@
 import React from 'react'
-import { MDBRow, MDBCol, MDBCard, MDBCardBody, MDBBtn } from "mdbreact";
+import { MDBRow, MDBCol, MDBCard, MDBCardBody } from "mdbreact";
 import { Link } from 'react-router-dom';
 
 function Welcome(props) {

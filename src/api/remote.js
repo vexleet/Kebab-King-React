@@ -1,4 +1,9 @@
-const host = 'http://localhost:5000/'
+const host = 'http://localhost:5000/';
+
+function getToken() {
+    return localStorage.getItem("token");
+
+}
 
 async function registerUser(user) {
     const res = await fetch(host + 'auth/signup', {
@@ -36,12 +41,12 @@ async function getStats() {
     return res.json()
 }
 
-async function createKebab(kebab, token) {
+async function createKebab(kebab) {
     const res = await fetch(host + 'kebab/create', {
         method: "post",
         headers: {
             "Content-Type": "application/json",
-            "Authorization": `Bearer ${token}`,
+            "Authorization": `Bearer ${getToken()}`,
         },
         body: JSON.stringify(kebab),
     });
@@ -49,12 +54,12 @@ async function createKebab(kebab, token) {
     return res.json();
 }
 
-async function createOrder(order, token) {
+async function createOrder(order) {
     const res = await fetch(host + 'orders/submit', {
         method: "post",
         headers: {
             "Content-Type": "application/json",
-            "Authorization": `Bearer ${token}`,
+            "Authorization": `Bearer ${getToken()}`,
         },
         body: JSON.stringify(order),
     });
@@ -63,11 +68,10 @@ async function createOrder(order, token) {
 }
 
 async function getOrders() {
-    let token = localStorage.getItem("token");
     const res = await fetch(host + 'orders/user', {
         headers: {
             "Content-Type": "application/json",
-            "Authorization": `Bearer ${token}`,
+            "Authorization": `Bearer ${getToken()}`,
         }
     });
 
@@ -75,10 +79,9 @@ async function getOrders() {
 }
 
 async function pendingOrders() {
-    let token = localStorage.getItem("token");
     const res = await fetch(host + 'orders/pending', {
         headers: {
-            "Authorization": `Bearer ${token}`,
+            "Authorization": `Bearer ${getToken()}`,
         }
     });
 
@@ -90,41 +93,41 @@ async function approveOrder(orderId) {
     const res = await fetch(host + `orders/approve/${orderId}`, {
         method: "post",
         headers: {
-            "Authorization": `Bearer ${token}`,
+            "Authorization": `Bearer ${getToken()}`,
         }
     });
 
     return res.json();
 }
 
-async function likeKebab(kebabId, token) {
+async function likeKebab(kebabId) {
     const res = await fetch(host + `kebab/like/${kebabId}`, {
         method: "post",
         headers: {
-            "Authorization": `Bearer ${token}`,
+            "Authorization": `Bearer ${getToken()}`,
         },
     });
 
     return res.json();
 }
 
-async function unlikeKebab(kebabId, token) {
+async function unlikeKebab(kebabId) {
     const res = await fetch(host + `kebab/unlike/${kebabId}`, {
         method: "post",
         headers: {
-            "Authorization": `Bearer ${token}`,
+            "Authorization": `Bearer ${getToken()}`,
         },
     });
 
     return res.json();
 }
 
-async function postReview(kebabId, review, token) {
+async function postReview(kebabId, review) {
     const res = await fetch(host + `kebab/review/${kebabId}`, {
         method: "post",
         headers: {
             "Content-Type": "application/json",
-            "Authorization": `Bearer ${token}`,
+            "Authorization": `Bearer ${getToken()}`,
         },
         body: JSON.stringify({ review }),
     });
@@ -133,11 +136,10 @@ async function postReview(kebabId, review, token) {
 }
 
 async function deleteKebab(kebabId) {
-    let token = localStorage.getItem("token");
     const res = await fetch(host + `kebab/delete/${kebabId}`, {
         method: "delete",
         headers: {
-            "Authorization": `Bearer ${token}`,
+            "Authorization": `Bearer ${getToken()}`,
         },
     });
 
@@ -145,12 +147,11 @@ async function deleteKebab(kebabId) {
 }
 
 async function editKebab(kebabId, kebab) {
-    let token = localStorage.getItem("token");
     const res = await fetch(host + `kebab/edit/${kebabId}`, {
         method: "post",
         headers: {
             "Content-Type": "application/json",
-            "Authorization": `Bearer ${token}`,
+            "Authorization": `Bearer ${getToken()}`,
         },
         body: JSON.stringify(kebab),
     });

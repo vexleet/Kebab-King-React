@@ -1,6 +1,5 @@
 import React from 'react';
 import { Footer } from 'mdbreact';
-import { Link } from 'react-router-dom';
 
 const FooterTest = () => {
     return (

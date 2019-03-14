@@ -30,10 +30,9 @@ class Create extends Component {
             return;
         }
 
-        let token = localStorage.getItem("token");
         kebab.ingredients = kebab.ingredients.split(',');
 
-        createKebab(kebab, token)
+        createKebab(kebab)
             .then((res) => {
                 if (!res.success) {
                     toastr.error(res.message);
@@ -42,6 +41,7 @@ class Create extends Component {
 
                 toastr.success(res.message);
                 this.props.updateKebabsState();
+                this.props.updateStatsState();
                 this.props.history.push("/");
             });
     }
