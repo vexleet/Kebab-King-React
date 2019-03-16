@@ -40,8 +40,6 @@ class Create extends Component {
                 }
 
                 toastr.success(res.message);
-                this.props.updateKebabsState();
-                this.props.updateStatsState();
                 this.props.history.push("/");
             });
     }

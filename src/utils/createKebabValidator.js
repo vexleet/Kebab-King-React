@@ -10,6 +10,11 @@ function createKebabValidator(kebab) {
         toastr.error('Kebab name must be at least 3 symbols.');
     }
 
+    if (kebab.ingredients.length < 3 || kebab.ingredients.indexOf(', ') > -1 || kebab.ingredients === '') {
+        isValid = false;
+        toastr.error('Ingredients must be at least 3 characters long and separated by comma')
+    }
+
     if (!kebab || typeof kebab.size !== 'string' || kebab.size.length < 3) {
         isValid = false;
         toastr.error('Size must be at least 3 symbols');;

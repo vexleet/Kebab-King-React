@@ -19,7 +19,6 @@ import AdminRoute from './components/Routes/AdminRoute';
 import PrivateRoute from './components/Routes/PrivateRoute';
 import Edit from './components/Edit/Edit';
 import toastr from 'toastr';
-import { getKebabs, getOrders, pendingOrders, getStats } from './api/remote';
 
 class App extends Component {
   constructor(props) {
@@ -30,21 +29,12 @@ class App extends Component {
       isAuthenticated: false,
       isAdmin: false,
       isLoading: true,
-      kebabs: [],
-      orders: [],
       cartOrders: [],
-      stats: [],
     }
 
     this.userHasAuthenticated = this.userHasAuthenticated.bind(this);
     this.logout = this.logout.bind(this);
-    this.updateKebabsState = this.updateKebabsState.bind(this);
     this.addOrder = this.addOrder.bind(this);
-    this.removeOrder = this.removeOrder.bind(this);
-    this.changeQuantityOfProduct = this.changeQuantityOfProduct.bind(this);
-    this.clearCartState = this.clearCartState.bind(this);
-    this.updateOrdersState = this.updateOrdersState.bind(this);
-    this.updateStatsState = this.updateStatsState.bind(this);
   }
 
   userHasAuthenticated(authenticated, username, token, isAdmin) {
@@ -57,57 +47,20 @@ class App extends Component {
     localStorage.setItem("username", username);
     localStorage.setItem("token", token);
     localStorage.setItem("isAdmin", isAdmin);
-
-    this.updateStatsState();
-    this.updateOrdersState(isAdmin);
+    localStorage.setItem("cartOrders", JSON.stringify([]));
   }
-
-  updateKebabsState() {
-    getKebabs().then((kebabs) => this.setState({ kebabs }));
-  }
-
-  updateStatsState() {
-    getStats().then((s) => this.setState({ stats: s }));
-  }
-
-  updateOrdersState(isAdmin = false) {
-    if (isAdmin) {
-      pendingOrders().then((orders) => this.setState({ orders }));
-    }
-    else {
-      getOrders().then((orders) => this.setState({ orders }));
-    }
-  }
-
-  clearCartState() {
-    this.setState({ cartOrders: [] });
-  }
-
   addOrder(kebab) {
-    let cartOrders = this.state.cartOrders.slice();
+    let cartOrders = JSON.parse(localStorage.getItem("cartOrders"));
+    let kebabIsInCart = cartOrders.find((o) => o._id === kebab._id) !== undefined;
 
-    if (cartOrders.indexOf(kebab) < 0) {
+    if (!kebabIsInCart) {
       kebab.qty = "1";
       cartOrders.push(kebab);
-      this.setState({ cartOrders: cartOrders });
+      localStorage.setItem("cartOrders", JSON.stringify(cartOrders));
       this.props.history.push('/cart');
       return;
     }
     toastr.error("Kebab already in cart");
-  }
-
-  removeOrder(order) {
-    let cartOrders = this.state.cartOrders.slice();
-    let indexOfOrder = cartOrders.indexOf(order);
-    cartOrders.splice(indexOfOrder, 1);
-    this.setState({ cartOrders: cartOrders });
-  }
-
-  changeQuantityOfProduct(order, qty) {
-    let cartOrders = this.state.cartOrders.slice();
-    let indexOfOrder = cartOrders.indexOf(order);
-    cartOrders[indexOfOrder].qty = qty;
-    this.setState({ cartOrders: cartOrders });
   }
 
   logout() {
@@ -130,8 +83,8 @@ class App extends Component {
 
       this.userHasAuthenticated(true, username, token, isAdmin);
     }
+
     this.setState({ isLoading: false });
-    this.updateKebabsState();
   }
 
   render() {
@@ -139,19 +92,9 @@ class App extends Component {
       isAuthenticated: this.state.isAuthenticated,
       isAdmin: this.state.isAdmin,
       username: this.state.username,
-      kebabs: this.state.kebabs,
-      orders: this.state.orders,
-      cartOrders: this.state.cartOrders,
-      stats: this.state.stats,
       userHasAuthenticated: this.userHasAuthenticated,
       logout: this.logout,
-      updateKebabsState: this.updateKebabsState,
       addOrder: this.addOrder,
-      removeOrder: this.removeOrder,
-      changeQuantityOfProduct: this.changeQuantityOfProduct,
-      clearCartState: this.clearCartState,
-      updateOrdersState: this.updateOrdersState,
-      updateStatsState: this.updateStatsState,
     };
 
     if (this.state.isLoading) {

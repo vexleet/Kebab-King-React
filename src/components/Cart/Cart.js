@@ -3,19 +3,41 @@ import { createOrder } from '../../api/remote';
 import { Link } from 'react-router-dom';
 import toastr from 'toastr';
 import createOrderValidator from '../../utils/createOrderValidator';
+import Loading from '../../components/Common/Loading/Loading';
 
 class Cart extends Component {
-    handleRemove() {
-        let order = this[1];
+    constructor(props) {
+        super(props);
 
-        this[0].props.removeOrder(order);
+        this.state = {
+            cartOrders: [],
+            isLoading: true,
+        }
+
+        this.updateLocalStorageCart = this.updateLocalStorageCart.bind(this);
     }
 
-    handleChangeOfQuantity(e) {
-        let qtyValue = e.target.value;
+    removeOrderFromCart() {
+        let order = this[1];
+        console.log(this);
+        let cartOrders = this[0].state.cartOrders.slice();
+        let indexOfOrder = cartOrders.indexOf(order);
+        cartOrders.splice(indexOfOrder, 1);
+        console.log(cartOrders);
+        this[0].setState({ cartOrders }, () => {
+            this[0].updateLocalStorageCart();
+        });
+    }
+
+    changeQuantityOfAProduct(e) {
+        let qty = e.target.value;
         let order = this[1];
 
-        this[0].props.changeQuantityOfProduct(order, qtyValue);
+        let cartOrders = this[0].state.cartOrders.slice();
+        let indexOfOrder = cartOrders.indexOf(order);
+        cartOrders[indexOfOrder].qty = qty;
+        this[0].setState({ cartOrders: cartOrders });
+        this[0].updateLocalStorageCart();
     }
 
     handlePurchase() {
@@ -29,14 +51,28 @@ class Cart extends Component {
         createOrder(orders, token)
             .then((res) => {
                 toastr.success(res.message);
-                this[0].props.clearCartState();
-                this[0].props.updateOrdersState();
+                this[0].setState({ cartOrders: [] });
+                this[0].updateLocalStorageCart();
                 this[0].props.history.push('/orders');
             });
     }
 
+    updateLocalStorageCart() {
+        localStorage.setItem("cartOrders", JSON.stringify(this.state.cartOrders));
+    }
+
+    componentDidMount() {
+        let cartOrders = JSON.parse(localStorage.getItem("cartOrders"));
+
+        this.setState({ cartOrders, isLoading: false });
+    }
+
     render() {
-        let orders = this.props.cartOrders;
+        if (this.state.isLoading) {
+            return <Loading />
+        }
+
+        let orders = this.state.cartOrders;
         let total = orders.reduce((accumulator, currentValue) =>
             accumulator + currentValue.price * currentValue.qty, 0);
 
@@ -80,14 +116,14 @@ class Cart extends Component {
                                         <td />
                                         <td>${order.price}</td>
                                         <td>
-                                            <input type="number" defaultValue={order.qty} min="1" aria-label="Search" className="form-control" style={{ width: '100px' }} onChange={this.handleChangeOfQuantity.bind([this, order])} />
+                                            <input type="number" defaultValue={order.qty} min="1" aria-label="Search" className="form-control" style={{ width: '100px' }} onChange={this.changeQuantityOfAProduct.bind([this, order])} />
                                         </td>
                                         <td className="font-weight-bold">
                                             <strong>${(order.qty * order.price).toFixed(2)}</strong>
                                         </td>
                                         <td>
                                             <button type="button"
-                                                className="btn btn-sm btn-primary" data-toggle="tooltip" data-placement="top" title="Remove item" onClick={this.handleRemove.bind([this, order])}>X</button>
+                                                className="btn btn-sm btn-primary" data-toggle="tooltip" data-placement="top" title="Remove item" onClick={this.removeOrderFromCart.bind([this, order])}>X</button>
                                         </td>
                                     </tr>
                                 })}

@@ -5,12 +5,14 @@ import createKebabValidator from '../../utils/createKebabValidator';
 import { createKebabValidateForm } from '../../utils/formValidators';
 import Loading from '../Common/Loading/Loading';
 import toastr from 'toastr';
+import { getKebabs } from '../../api/remote';
 
 class Edit extends Component {
     constructor(props) {
         super(props);
 
         this.state = {
+            kebabs: [],
             name: "",
             ingredients: "",
             description: "",
@@ -42,7 +44,6 @@ class Edit extends Component {
                 }
 
                 toastr.success(res.message);
-                this.props.updateKebabsState();
                 this.props.history.push("/");
             });
     }
@@ -52,11 +53,10 @@ class Edit extends Component {
     }
 
     componentDidMount() {
-        let kebabs = this.props.kebabs;
-        let kebabId = this.props.match.params.id;
-        let kebab = kebabs.find((k) => k._id === kebabId);
+        getKebabs().then((kebabs) => {
+            let kebabId = this.props.match.params.id;
+            let kebab = kebabs.find((k) => k._id === kebabId);
 
-        if (kebab) {
             this.setState({
                 name: kebab.name,
                 ingredients: kebab.ingredients.join(","),
@@ -64,15 +64,13 @@ class Edit extends Component {
                 size: kebab.size,
                 price: kebab.price,
                 image: kebab.image,
+                kebabs,
             });
-        }
-        else {
-            this.props.updateKebabsState();
-        }
+        });
     }
 
     componentWillReceiveProps(nextProps) {
-        let kebabs = this.props.kebabs;
+        let kebabs = this.state.kebabs;
         let kebabId = this.props.match.params.id;
         let kebab = kebabs.find((k) => k._id === kebabId);
 
@@ -83,13 +81,15 @@ class Edit extends Component {
                 description: kebab.description,
                 size: kebab.size,
                 price: kebab.price,
-                image: kebab.image
+                image: kebab.image,
+                kebabs
             })
         }
     }
 
     render() {
-        if (this.props.kebabs.length === 0) {
+        console.log(this.state);
+        if (this.state.kebabs.length === 0) {
             return <Loading />
         }
 

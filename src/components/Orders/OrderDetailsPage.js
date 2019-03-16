@@ -2,18 +2,33 @@ import React, { Component } from 'react'
 import { MDBTable, MDBTableHead, MDBContainer } from 'mdbreact';
 import OrderDetailsRow from './OrderDetailsRow';
 import Loading from '../Common/Loading/Loading';
+import { getOrders, pendingOrders } from '../../api/remote';
 
 class OrdersBody extends Component {
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            orders: [],
+            isLoading: true,
+        }
+    }
+
     componentWillMount() {
-        this.props.updateOrdersState(this.props.isAdmin);
+        if (this.props.isAdmin) {
+            pendingOrders().then((orders) => this.setState({ orders, isLoading: false }));
+        }
+        else {
+            getOrders().then((orders) => this.setState({ orders, isLoading: false }));
+        }
     }
 
     render() {
-        if (this.props.orders.length === 0) {
+        if (this.state.orders.length === 0) {
             return <Loading />
         }
 
-        let { orders } = this.props;
+        let { orders } = this.state;
         let orderId = this.props.match.params.id;
         let order = orders.find(o => o._id === orderId);
 

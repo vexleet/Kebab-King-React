@@ -6,15 +6,25 @@ import Review from './Review';
 import Loading from '../Common/Loading/Loading';
 import { likeKebab, unlikeKebab, postReview } from '../../api/remote';
 import toastr from 'toastr';
+import { getKebabs } from '../../api/remote';
 
 class KebabPageDetails extends Component {
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            kebabs: [],
+        }
+
+        this.updateKebabsState = this.updateKebabsState.bind(this);
+    }
 
     handleLike() {
         const kebabId = this[1];
 
         likeKebab(kebabId)
             .then(() => {
-                this[0].props.updateKebabsState();
+                this[0].updateKebabsState();
                 toastr.success("Kebab liked successfully");
             });
     }
@@ -24,7 +34,7 @@ class KebabPageDetails extends Component {
 
         unlikeKebab(kebabId)
             .then(() => {
-                this[0].props.updateKebabsState();
+                this[0].updateKebabsState();
                 toastr.success("Kebab unliked successfully");
             });
     }
@@ -34,7 +44,7 @@ class KebabPageDetails extends Component {
 
         postReview(kebabId, review)
             .then((res) => {
-                this[0].props.updateKebabsState();
+                this[0].updateKebabsState();
                 toastr.success(res.message);
             })
     }
@@ -43,13 +53,20 @@ class KebabPageDetails extends Component {
         this[0].props.addOrder(this[1]);
     }
 
+    updateKebabsState() {
+        getKebabs().then((kebabs) => this.setState({ kebabs, isLoading: false, }));
+    }
+
+    componentDidMount() {
+        this.updateKebabsState();
+    }
 
     render() {
-        if (this.props.kebabs.length === 0) {
+        if (this.state.kebabs.length === 0) {
             return <Loading />
         }
 
-        let kebabs = this.props.kebabs;
+        let kebabs = this.state.kebabs;
         let kebabId = this.props.match.params.id;
         let kebab = kebabs.find((k) => k._id === kebabId);
         let kebabIsLiked = kebab.likes.indexOf(this.props.username) >= 0;

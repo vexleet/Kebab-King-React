@@ -1,15 +1,35 @@
 import React, { Component } from 'react'
 import KebabCards from '../Common/Kebab/KebabCards';
 import Paginator from '../Common/Paginator';
+import { getKebabs, getStats } from '../../api/remote';
+import Loading from '../../components/Common/Loading/Loading';
 
 class MenuPage extends Component {
     constructor(props) {
         super(props)
         this.state = {
-            query: ''
+            query: '',
+            kebabs: [],
+            isLoading: true,
+            stats: [],
         }
 
-        this.onChange = this.onChange.bind(this)
+        this.onChange = this.onChange.bind(this);
+        this.updateKebabsState = this.updateKebabsState.bind(this);
+        this.updateStatsState = this.updateStatsState.bind(this);
+    }
+
+    updateKebabsState() {
+        getKebabs().then((kebabs) => this.setState({ kebabs, isLoading: false, }));
+    }
+
+    updateStatsState() {
+        getStats().then((s) => this.setState({ stats: s }));
+    }
+
+    componentDidMount() {
+        this.updateKebabsState();
+        this.updateStatsState();
     }
 
     onChange(e) {
@@ -17,7 +37,13 @@ class MenuPage extends Component {
     }
 
     render() {
-        let { kebabs, stats, addOrder, isAdmin, isAuthenticated, updateKebabsState, updateStatsState } = this.props
+        if (this.state.isLoading) {
+            return <Loading />;
+        }
+
+        let { addOrder, isAdmin, isAuthenticated } = this.props;
+        let { kebabs, stats } = this.state
+
         let kebabsCount = stats.products;
         const page = Number(this.props.match.params.page) || 1;
 
@@ -50,7 +76,7 @@ class MenuPage extends Component {
                 </div>
                 <KebabCards kebabs={kebabs} addOrder={addOrder}
                     isAdmin={isAdmin} isAuthenticated={isAuthenticated}
-                    updateKebabsState={updateKebabsState} updateStatsState={updateStatsState} />
+                    updateKebabsState={this.updateKebabsState} updateStatsState={this.updateStatsState} />
                 <Paginator
                     kebabsCount={kebabsCount}
                     pageSize={pageSize}
