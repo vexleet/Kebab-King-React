@@ -39,6 +39,11 @@ class KebabPageDetails extends Component {
             })
     }
 
+    handleOrder() {
+        this[0].props.addOrder(this[1]);
+    }
+
+
     render() {
         if (this.props.kebabs.length === 0) {
             return <Loading />
@@ -55,7 +60,8 @@ class KebabPageDetails extends Component {
                 <Details kebab={kebab}
                     kebabIsLiked={kebabIsLiked}
                     handleLike={this.handleLike.bind([this, kebab._id])}
-                    handleUnlike={this.handleUnlike.bind([this, kebab._id])} />
+                    handleUnlike={this.handleUnlike.bind([this, kebab._id])}
+                    handleOrder={this.handleOrder.bind([this, kebab])} />
                 <InputReview handleReview={this.handleReview.bind([this, kebab._id])} />
                 <MDBCardHeader className="border-0 font-weight-bold marginTop">
                     <p className="mr-4 mb-0">{kebab.reviews.length} reviews</p>

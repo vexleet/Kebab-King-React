@@ -71,7 +71,7 @@ const Details = (props) => {
                         </MDBCol>
                     </MDBRow>
                     <MDBRow>
-                        <MDBBtn color="orange" rounded size="md">Order</MDBBtn>
+                        <MDBBtn color="orange" rounded size="md" onClick={props.handleOrder}>Order</MDBBtn>
                         {kebabIsLiked ?
                             <MDBBtn color="blue" rounded size="md" onClick={props.handleUnlike}>Unlike</MDBBtn>
                             : <MDBBtn color="blue" rounded size="md" onClick={props.handleLike}>Like</MDBBtn>}

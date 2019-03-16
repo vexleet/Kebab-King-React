@@ -1,7 +1,7 @@
 import React from "react";
 import KebabCards from '../Common/Kebab/KebabCards';
 import Welcome from './Welcome';
-import { MDBCard } from "mdbreact";
+import { MDBCard, MDBRow, MDBCardBody } from "mdbreact";
 
 const Home = (props) => {
     let { kebabs, addOrder, isAdmin, isAuthenticated, updateKebabsState, username, updateStatsState } = props;
@@ -15,6 +15,10 @@ const Home = (props) => {
     return (
         <MDBCard className="my-5 px-5 pb-5">
             <Welcome username={username} isAuthenticated={isAuthenticated} />
+            <MDBCardBody>
+                <h2 className="h1-responsive font-weight-bold text-center">
+                    Our top rated kebabs
+                </h2></MDBCardBody>
             <KebabCards kebabs={kebabs} addOrder={addOrder}
                 isAdmin={isAdmin} isAuthenticated={isAuthenticated}
                 updateKebabsState={updateKebabsState} updateStatsState={updateStatsState} />

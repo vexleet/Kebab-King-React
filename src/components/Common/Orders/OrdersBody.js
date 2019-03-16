@@ -14,11 +14,13 @@ const OrdersBody = (props) => {
                     <td>{new Date(order.date).toLocaleString()}</td>
                     <td>{total.toFixed(2)}</td>
                     <td>{order.status}</td>
-                    <td><Link to={`/orders/${order._id}`}
-                        className="white-text orange darken-1 btn btn-blue btn-md btn-rounded Ripple-parent">View</Link>
+                    <td>
+                        <Link to={`/orders/${order._id}`}
+                        className="white-text orange darken-1 
+                        btn btn-blue btn-md btn-rounded Ripple-parent">View</Link>
                     </td>
                     {props.isAdmin && <td><MDBBtn color="green"
-                        rounded size="md"
+                        rounded size="md" className="no-margin"
                         onClick={props.handleApprove.bind([props, order._id])}>Approve</MDBBtn></td>}
                 </tr>
             })}

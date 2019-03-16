@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import './App.css';
 import Footer from './components/Common/Footer';
 import Navigation from './components/Common/Navigation';
 import { withRouter, Switch } from 'react-router-dom';

@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import { createOrder } from '../../api/remote';
 import { Link } from 'react-router-dom';
 import toastr from 'toastr';
+import createOrderValidator from '../../utils/createOrderValidator';
+
 class Cart extends Component {
     handleRemove() {
         let order = this[1];
@@ -19,6 +21,10 @@ class Cart extends Component {
     handlePurchase() {
         let orders = this[1];
         let token = localStorage.getItem("token");
+
+        if (!createOrderValidator(orders)) {
+            return;
+        }
 
         createOrder(orders, token)
             .then((res) => {
